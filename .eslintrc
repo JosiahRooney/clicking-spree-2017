@@ -1,0 +1,16 @@
+{
+  "config_file": "conf/eslint.json",
+  "parser": "babel-eslint",
+  "plugins": [
+    "lw"
+  ],
+  "ecmaFeatures": {
+  },
+  "env": {
+    "browser": true,
+    "node": true,
+    "jquery": true,
+    "es6": true,
+    "mocha": true
+  }
+}

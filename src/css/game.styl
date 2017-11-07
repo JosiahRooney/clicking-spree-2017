@@ -1,0 +1,114 @@
+@import ('clearfix.styl')
+@import ('ripple.styl')
+
+body
+  padding-top 170px // for the sticky header
+
+p
+  margin 0
+
+.hide
+  display none
+
+.unit
+.upgrade
+  margin-bottom 20px
+  border 1px solid #aaa
+  padding 15px
+
+.kills
+  span
+    font-weight bold
+    font-size 1.7rem
+  
+.unit-costs
+.unit-total
+.upgrade-costs
+  padding 10px 0
+  span
+    font-weight bold
+    font-size 1.5rem
+
+.description
+  padding 10px 0
+  font-size .8rem
+  text-align justify
+
+.info
+  font-size .8rem
+  span
+    font-weight bold
+
+.action-row
+  margin-top 25px
+  margin-bottom 20px
+  
+button
+  width 100%
+  position relative
+  
+  &:not(.disabled)
+    cursor pointer
+  &.disabled
+    cursor not-allowed
+    
+.unit__actions
+  button:after
+    content "+"
+    height 100%
+    width 40px
+    position absolute
+    background-color green
+    left 0
+    top 0
+    font-size 1.8rem
+    line-height 1.1
+    color white
+    border-top-left-radius 4px
+    border-bottom-left-radius 4px
+  
+.sticky-header
+  position fixed
+  height 150px
+  width 100%
+  top 0
+  left 0
+  background-color #fff
+  z-index 9
+  border-bottom 1px solid #ddd
+  box-shadow 0 0 10px rgba(0,0,0,0.2)
+  
+.purchased.disabled
+  cursor default
+  
+#sound-toggle
+  -webkit-appearance none
+  -moz-appearance none
+  appearance none
+  background-color #fafafa
+  border 1px solid #cacece
+  box-shadow 0 1px 2px rgba(0,0,0,0.05), inset 0px -15px 10px -12px rgba(0,0,0,0.05)
+  padding 9px
+  border-radius 3px
+  display inline-block
+  position relative
+  margin-top 10px
+  top 4px
+  
+  &:active
+  &:checked:active
+    box-shadow 0 1px 2px rgba(0,0,0,0.05), inset 0px 1px 3px rgba(0,0,0,0.1)
+
+  &:checked
+    background-color #e9ecee
+    border 1px solid #adb8c0
+    box-shadow 0 1px 2px rgba(0,0,0,0.05), inset 0px -15px 10px -12px rgba(0,0,0,0.05), inset 15px 10px -12px rgba(255,255,255,0.1)
+    color #99a1a7
+    
+  &:checked:after
+    content '\2714'
+    font-size 14px
+    position absolute
+    top -2px
+    left 0
+    color #99a1a7

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Clicking Spree</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <link rel="stylesheet" href="game.css">
+  </head>
+  <body>
+    <div class="main-wrap">
+
+      <div class="game">
+
+        <header class="sticky-header">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-9 title">
+                <h1>Clicking Spree</h1>
+              </div>
+              <div class="col-md-3">
+                <label for="sound-toggle">
+                  Enable Sounds?
+                  <input type="checkbox" id="sound-toggle" checked>
+                </label>
+              </div>
+            </div>
+            <div class="row action-row">
+              <div class="col-md-2 actions">
+                <button class="btn btn-lg btn-danger attack-button ripple">Attack</button>
+              </div>
+              <div class="col-md-10 stats">
+                <div class="row kills">
+                  <div class="col-md-4 text-center"><span class="total-kills">0.0</span> kills.</div>
+                  <div class="col-md-4 text-center"><span class="total-kps">0.0</span> kills per second (KPS).</div>
+                  <div class="col-md-4 text-center hide"><span class="total-kpc">1.0</span> kills per click (KPC).</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+          
+        <div class="container">
+
+          <div class="row">
+            <h2 class="col-md-6">Units</h2>
+            <h2 class="col-md-6">Upgrades</h2>
+            <div class="col-md-6 units">
+              <!-- handlebars/units -->
+            </div>
+            <div class="col-md-6 upgrades">
+              <!-- handlebars/upgrades -->
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <footer>
+        <script id="units-template" type="text/x-handlebars-template">
+          {{#each units.unit }}
+            <div class="unit unit__{{safeName}} unit-id-{{id}} col-md-12 hide" data-hide-unit-until="{{multiply cost 0.95}}">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="unit__actions">
+                    <button class="btn btn-success disabled {{safeName}}--add ripple" data-unitid="{{id}}" data-hide-until="{{cost}}">
+                      {{name}}
+                    </button>
+                    {{!-- <button class="btn btn-success disabled hide {{safeName}}--add-10" data-unitid="{{id}}" data-hide-until="{{multiply cost 10}}">
+                      10x
+                    </button>
+                    <button class="btn btn-warning disabled hide {{safeName}}--add-25" data-unitid="{{id}}" data-hide-until="{{multiply cost 25}}">
+                      25x
+                    </button>
+                    <button class="btn btn-danger disabled hide {{safeName}}--add-100" data-unitid="{{id}}" data-hide-until="{{multiply cost 100}}">
+                      100x
+                    </button> --}}
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="unit-costs cf">
+                    <div class="col-md-2">Cost:</div>
+                    <div class="col-md-10">
+                      <p><span class="{{safeName}}__cost">{{cost}}</span> kills</p>
+                    </div>
+                    {{#if unitCost}}
+                      <div class="col-md-10 col-md-offset-2 cf">
+                        <span class="{{safeName}}__unit-cost">{{unitCost.cost}}</span>
+                        {{fromArray @root.units.unit unitCost.unit 'name'}}
+                      </div>
+                    {{/if}}
+                  </div>
+                  <div class="unit-total">
+                    <div class="col-md-2">Have:</div>
+                    <div class="col-md-10">
+                      <p><span class="{{safeName}}__total">{{total}}</span></p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-8 cf">
+                  <div class="{{safeName}}__description description">
+                    {{description}}
+                  </div>
+                  <div class="info text-right">
+                    Kills per second: <span class="{{safeName}}__kps">{{kpsMin}} - {{kpsMax}}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {{/each}}
+        </script>
+
+        <script id="upgrades-template" type="text/x-handlebars-template">
+          {{#each upgrades.upgrade }}
+            <div class="upgrade upgrade__{{safeName}} upgrade-id-{{id}} col-md-12 hide" data-hide-upgrade-until="{{multiply cost 0.95}}">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="upgrade__actions">
+                    <button class="btn btn-success disabled {{safeName}}--add ripple" data-upgradeid="{{id}}" data-hide-until="{{cost}}">
+                      {{name}}
+                    </button>
+                    {{!-- <button class="btn btn-success disabled hide {{safeName}}--add-10" data-upgradeid="{{id}}" data-hide-until="{{multiply cost 10}}">
+                      10x
+                    </button>
+                    <button class="btn btn-warning disabled hide {{safeName}}--add-25" data-upgradeid="{{id}}" data-hide-until="{{multiply cost 25}}">
+                      25x
+                    </button>
+                    <button class="btn btn-danger disabled hide {{safeName}}--add-100" data-upgradeid="{{id}}" data-hide-until="{{multiply cost 100}}">
+                      100x
+                    </button> --}}
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="upgrade-costs cf">
+                    <div class="col-md-2">Cost:</div>
+                    <div class="col-md-10">
+                      <p><span class="{{safeName}}__cost">{{cost}}</span> kills</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-8 cf">
+                  <div class="{{safeName}}__description description">
+                    {{description}}
+                  </div>
+                  <div class="{{safeName}}__upgrade-text upgrade-text info text-right">
+                    {{upgradeText}}
+                  </div>
+                </div>
+              </div>
+            </div>
+          {{/each}}
+        </script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+        <script src="./howler/dist/howler.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> <!-- only for ripple.. -->
+        <script src="./js/ripple.js"></script>
+        <script data-main="./js/game.js" src="./js/require.js"></script>
+      </footer>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,44 @@
+<script id="units-template" type="text/x-handlebars-template">
+  123
+  {{#each units.unit }}
+    <div class="unit unit__{{safeName}} col-md-12">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="unit__actions">
+            <button class="btn btn-primary disabled {{safeName}}--add">
+              {{name}}
+            </button>
+            <button class="btn btn-success disabled {{safeName}}--add-10" data-hide-until="{{cost * 10}}">
+              10x
+            </button>
+            <button class="btn btn-warning disabled {{safeName}}--add-25" data-hide-until="{{cost * 25}}">
+              25x
+            </button>
+            <button class="btn btn-danger disabled {{safeName}}--add-100" data-hide-until="{{cost * 100}}">
+              100x
+            </button>
+          </div>
+          <div class="unit-costs cf">
+            <div class="col-md-2">Cost:</div>
+            <div class="col-md-10">
+              <p><span class="{{safeName}}__cost">{{cost}}</span> kills</p>
+            </div>
+            {{#if unitCost}}
+              <div class="col-md-10 col-md-offset-2 cf">
+                <span class="{{safeName}}__unit-cost">{{unitCost.cost}}</span> {{ ../../units.unit[this.unitCost.unit].name }}
+              </div>
+            {{/if}}
+          </div>
+        </div>
+        <div class="col-md-8 cf">
+          <div class="{{safeName}}__description">
+            {{description}}
+          </div>
+          <div>
+            Kills per second: <span class="{{safeName}}__kps">{{kpsMin}} - {{kpsMax}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  {{/each}}
+</script>
