@@ -117,7 +117,7 @@ requirejs([
           if (this.upgrades.upgrade[5].isActive) {
             bonus = this.kps * 0.03;
           }
-          this.addKills(this.kpc + bonus + 100000000);
+          this.addKills(this.kpc + bonus);
           this.drawData();
           if (document.querySelector('#sound-toggle').checked) {
             const index = Math.floor(Math.random() * this.shotUrls.length);
