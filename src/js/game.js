@@ -27,21 +27,48 @@ requirejs([
       this.kps = 0;
       this.kpc = 1;
 
-      this.shotUrls = [
-        { name: 'gunshot', url: './sound/sfx/gunshot.wav' },
-        { name: 'rifle', url: './sound/sfx/rifle.wav' },
-        { name: 'rifle2', url: './sound/sfx/rifle2.wav' },
-        { name: 'rifle3', url: './sound/sfx/rifle3.wav' },
-        { name: 'rifle4', url: './sound/sfx/rifle4.wav' },
-        { name: 'shotgun', url: './sound/sfx/shotgun.wav' },
-        { name: 'shotgun2', url: './sound/sfx/shotgun2.wav' },
+      this.shotSounds = [
+        { name: 'gunshot', url: './sound/sfx/guns/gunshot.wav' },
+        { name: 'rifle', url: './sound/sfx/guns/rifle.wav' },
+        { name: 'rifle2', url: './sound/sfx/guns/rifle2.wav' },
+        { name: 'rifle3', url: './sound/sfx/guns/rifle3.wav' },
+        { name: 'rifle4', url: './sound/sfx/guns/rifle4.wav' },
+        { name: 'shotgun', url: './sound/sfx/guns/shotgun.wav' },
+        { name: 'shotgun2', url: './sound/sfx/guns/shotgun2.wav' },
       ];
+
+      this.shotUrls = [];
+
+      this.shotUrls.push(this.shotSounds[4]);
 
       for (let h = 0; h < this.shotUrls.length; h += 1) {
         this.shotUrls[h].audio = new Howl({
           src: [this.shotUrls[h].url],
         });
       }
+
+      this.voiceSounds = [
+        { name: 'yes-sir', url: './sound/sfx/voice/sir.wav' },
+        { name: 'break-1-9', url: './sound/sfx/voice/break-1-9.wav' },
+        { name: 'bug-out', url: './sound/sfx/voice/bug-out.wav' },
+        { name: 'rock-n-roll', url: './sound/sfx/voice/rock-n-roll.wav' },
+      ];
+
+      this.yesSir = new Howl({
+        src: [this.voiceSounds[0].url],
+      });
+
+      this.break19 = new Howl({
+        src: [this.voiceSounds[1].url],
+      });
+
+      this.bugOut = new Howl({
+        src: [this.voiceSounds[2].url],
+      });
+
+      this.rockNRoll = new Howl({
+        src: [this.voiceSounds[3].url],
+      });
     }
 
     init() {
@@ -90,7 +117,7 @@ requirejs([
           if (this.upgrades.upgrade[5].isActive) {
             bonus = this.kps * 0.03;
           }
-          this.addKills(this.kpc + bonus);
+          this.addKills(this.kpc + bonus + 100000000);
           this.drawData();
           if (document.querySelector('#sound-toggle').checked) {
             const index = Math.floor(Math.random() * this.shotUrls.length);
@@ -120,6 +147,22 @@ requirejs([
               unit.total += 1;
               unit.cost = Math.ceil(unit.cost * unit.costIncr);
               button.dataset.hideUntil = unit.cost;
+            }
+
+            if (document.querySelector('#sound-toggle').checked) {
+              // Play voice lines when recruiting units
+              if (unit.id === 0) {
+                this.yesSir.play();
+              }
+              if (unit.id === 1) {
+                this.rockNRoll.play();
+              }
+              if (unit.id === 6) {
+                this.break19.play();
+              }
+              if (unit.id === 7) {
+                this.bugOut.play();
+              }
             }
           }
           this.drawData();
