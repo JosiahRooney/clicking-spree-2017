@@ -2,7 +2,7 @@
 @import ('ripple.styl')
 
 body
-  padding-top 170px // for the sticky header
+  padding-top 200px // for the sticky header
 
 p
   margin 0
@@ -18,8 +18,9 @@ p
 
 .kills
   span
-    font-weight bold
-    font-size 1.7rem
+    font-family "Rajdhani", sans-serif;
+    font-size 2.4rem
+    line-height 1
   
 .unit-costs
 .unit-total
@@ -73,7 +74,6 @@ button
   width 100%
   top 0
   left 0
-  background-color #fff
   z-index 9
   border-bottom 1px solid #ddd
   box-shadow 0 0 10px rgba(0,0,0,0.2)
@@ -112,3 +112,28 @@ button
     top -2px
     left 0
     color #99a1a7
+
+.exp-bar
+  position relative
+  color white
+  
+  progress
+    -webkit-appearance none
+    appearance none
+    
+    width 100%
+    height 30px
+    
+  .level
+    position absolute
+    top -2px
+    left 0
+    width 100%
+    text-align center
+    text-shadow 1px 1px 1px rgba(0,0,0,1), 1px 1px 4px rgba(0,0,0,0.7), 1px 1px 4px rgba(0,0,0,0.7)
+    font-size 1.3rem
+    
+  progress[value]::-webkit-progress-bar
+    background-color #eee
+    border-radius 2px
+    box-shadow 0 2px 5px rgba(0, 0, 0, 0.25) inset

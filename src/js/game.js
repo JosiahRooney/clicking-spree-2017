@@ -5,11 +5,13 @@ requirejs([
   'units',
   'upgrades',
   'numeral.min',
+  '_levels',
 ], (
   Handlebars,
   Units,
   Upgrades,
   Numeral,
+  Levels,
 ) => {
   Handlebars.registerHelper('multiply', (a, b) => a * b);
   Handlebars.registerHelper('fromArray', (arr, index, key) => {
@@ -26,6 +28,11 @@ requirejs([
       this.kills = 0;
       this.kps = 0;
       this.kpc = 1;
+      this.exp = 0;
+      this.totalExp = 0;
+      this.level = 1;
+      this.levels = Levels;
+      this.toLevel = 0;
 
       this.shotSounds = [
         { name: 'gunshot', url: './sound/sfx/guns/gunshot.wav' },
@@ -57,17 +64,21 @@ requirejs([
       this.yesSir = new Howl({
         src: [this.voiceSounds[0].url],
       });
-
       this.break19 = new Howl({
         src: [this.voiceSounds[1].url],
       });
-
       this.bugOut = new Howl({
         src: [this.voiceSounds[2].url],
       });
-
       this.rockNRoll = new Howl({
         src: [this.voiceSounds[3].url],
+      });
+
+      this.explosions = [
+        { name: 'mortar', url: './sound/sfx/explosions/mortar.wav' },
+      ];
+      this.mortar = new Howl({
+        src: [this.explosions[0].url],
       });
     }
 
@@ -76,7 +87,10 @@ requirejs([
       this.container = document.querySelector('.game');
       this.killsContainer = this.container.querySelector('.total-kills');
       this.kpsContainer = this.container.querySelector('.total-kps');
-      this.kpcContainer = this.container.querySelector('.total-kpc');
+      this.expBar = document.querySelector('.exp-bar-progress');
+      this.levelElement = document.querySelector('.level span');
+      this.totalExpCounter = document.querySelector('.total-exp');
+      this.toLevelContainer = document.querySelector('.to-level');
       this.unitContainers = {};
       for (let k = 0; k < this.units.unit.length; k += 1) {
         const unit = this.units.unit[k];
@@ -104,20 +118,48 @@ requirejs([
       }, 1000);
       this.unitContainers.recruit.container.classList.remove('hide');
       this.upgradeContainers.red_dot_sight.container.classList.remove('hide');
+      this.expBar.value = this.exp;
+      this.levelElement.innerText = `${this.level}`;
+      this.expBar.max = this.levels[this.level + 1].exp;
     }
 
     addKills(delta) {
       this.kills += Math.ceil(delta * 10) / 10;
     }
 
+    addExp(delta) {
+      this.exp += Math.round(delta);
+      this.totalExp += Math.round(delta);
+    }
+
+    trackExp() {
+      const nextLevel = this.levels[this.level + 1];
+      this.toLevel = nextLevel.exp - this.exp;
+      if (this.exp >= nextLevel.exp) {
+        this.level += 1;
+        this.exp = 0;
+      }
+    }
+
     registerEventListeners() {
       this.container.addEventListener('click', (e) => {
         if (e.target.classList.contains('attack-button')) {
           let bonus = 0;
+
+          if (this.upgrades.upgrade[0].isActive) {
+            bonus = this.kpc * 1.05;
+          }
+
           if (this.upgrades.upgrade[5].isActive) {
             bonus = this.kps * 0.03;
           }
+
           this.addKills(this.kpc + bonus);
+
+          if (this.level < 99) {
+            this.addExp(this.kpc + bonus);
+          }
+
           this.drawData();
           if (document.querySelector('#sound-toggle').checked) {
             const index = Math.floor(Math.random() * this.shotUrls.length);
@@ -157,6 +199,9 @@ requirejs([
               if (unit.id === 1) {
                 this.rockNRoll.play();
               }
+              if (unit.id === 2) {
+                this.mortar.play();
+              }
               if (unit.id === 6) {
                 this.break19.play();
               }
@@ -186,9 +231,14 @@ requirejs([
     }
 
     drawData() {
+      this.trackExp();
       this.killsContainer.innerText = Numeral(this.kills).format('0.0[0]a');
       this.kpsContainer.innerText = Numeral(this.kps).format('0.0[0]a');
-      this.kpcContainer.innerText = Numeral(this.kpc).format('0.0[0]a');
+      this.expBar.value = this.exp;
+      this.levelElement.innerText = `${this.level}`;
+      this.expBar.max = this.levels[this.level + 1].exp;
+      this.totalExpCounter.innerText = Numeral(this.totalExp).format('0.[00]a');
+      this.toLevelContainer.innerText = Numeral(this.toLevel).format('0.[00]a');
 
       for (let j = 0; j < this.buttons.length; j += 1) {
         if (this.kills >= Number.parseInt(this.buttons[j].dataset.hideUntil, 10)) {
@@ -221,8 +271,7 @@ requirejs([
 
       let kps = 0;
       for (let i = 0; i < this.unitContainersArray.length; i += 1) {
-        const container = this.unitContainersArray[i][1].container;
-        const unit = this.unitContainersArray[i][1].unit;
+        const { container, unit } = this.unitContainersArray[i][1];
 
         container.querySelector(`.${unit.safeName}__cost`).innerText = unit.cost;
         container.querySelector(`.${unit.safeName}__total`).innerText = unit.total;
@@ -233,8 +282,7 @@ requirejs([
         }
       }
       for (let o = 0; o < this.upgradeContainersArray.length; o += 1) {
-        const container = this.upgradeContainersArray[o][1].container;
-        const upgrade = this.upgradeContainersArray[o][1].upgrade;
+        const { container, upgrade } = this.upgradeContainersArray[o][1];
         if (this.kills >= container.dataset.hideUpgradeUntil) {
           container.classList.remove('hide');
         }
@@ -261,5 +309,4 @@ requirejs([
   document.querySelector('.upgrades').innerHTML = upgHtml;
 
   game.init();
-
 });

@@ -5,6 +5,7 @@
     <title>Clicking Spree</title>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Rajdhani" rel="stylesheet">
     <link rel="stylesheet" href="game.css">
   </head>
   <body>
@@ -31,12 +32,17 @@
               </div>
               <div class="col-md-10 stats">
                 <div class="row kills">
-                  <div class="col-md-4 text-center"><span class="total-kills">0.0</span> kills.</div>
-                  <div class="col-md-4 text-center"><span class="total-kps">0.0</span> kills per second (KPS).</div>
-                  <div class="col-md-4 text-center hide"><span class="total-kpc">1.0</span> kills per click (KPC).</div>
+                  <div class="col-md-3 text-center"><span class="total-kills">0.0</span> kills.</div>
+                  <div class="col-md-3 text-center"><span class="total-kps">0.0</span> KPS.</div>
+                  <div class="col-md-3 text-center">Exp: <span class="total-exp">0</span></div>
+                  <div class="col-md-3 text-center">To level: <span class="to-level">0</span></div>
                 </div>
               </div>
             </div>
+          </div>
+          <div class="exp-bar">
+            <progress max="100" value="0" class="exp-bar-progress"></progress>
+            <div class="level">Level <span>1</span></div>
           </div>
         </header>
           
