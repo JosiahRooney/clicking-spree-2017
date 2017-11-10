@@ -87,6 +87,7 @@ requirejs([
       this.container = document.querySelector('.game');
       this.killsContainer = this.container.querySelector('.total-kills');
       this.kpsContainer = this.container.querySelector('.total-kps');
+      this.kpcContainer = this.container.querySelector('.total-kpc');
       this.expBar = document.querySelector('.exp-bar-progress');
       this.levelElement = document.querySelector('.level span');
       this.totalExpCounter = document.querySelector('.total-exp');
@@ -114,7 +115,7 @@ requirejs([
       this.registerEventListeners();
       setInterval(() => {
         this.addKills(this.kps);
-        this.drawData();
+        this.gameLoop();
       }, 1000);
       this.unitContainers.recruit.container.classList.remove('hide');
       this.upgradeContainers.red_dot_sight.container.classList.remove('hide');
@@ -128,8 +129,8 @@ requirejs([
     }
 
     addExp(delta) {
-      this.exp += Math.round(delta);
-      this.totalExp += Math.round(delta);
+      this.exp += delta;
+      this.totalExp += delta;
     }
 
     trackExp() {
@@ -138,6 +139,8 @@ requirejs([
       if (this.exp >= nextLevel.exp) {
         this.level += 1;
         this.exp = 0;
+        this.kills += this.levels[this.level].exp * 0.03;
+        this.kpc = this.level * 0.6;
       }
     }
 
@@ -234,6 +237,7 @@ requirejs([
       this.trackExp();
       this.killsContainer.innerText = Numeral(this.kills).format('0.0[0]a');
       this.kpsContainer.innerText = Numeral(this.kps).format('0.0[0]a');
+      this.kpcContainer.innerText = Numeral(this.kpc).format('0.0[0]a');
       this.expBar.value = this.exp;
       this.levelElement.innerText = `${this.level}`;
       this.expBar.max = this.levels[this.level + 1].exp;
@@ -268,7 +272,9 @@ requirejs([
           this.upgButtons[m].classList.add('disabled');
         }
       }
+    }
 
+    gameLoop() {
       let kps = 0;
       for (let i = 0; i < this.unitContainersArray.length; i += 1) {
         const { container, unit } = this.unitContainersArray[i][1];
@@ -294,6 +300,10 @@ requirejs([
         }
       }
       this.kps = kps;
+      if (kps > 1) {
+        this.addExp(Math.floor(kps));
+      }
+      this.drawData();
     }
   }
 
