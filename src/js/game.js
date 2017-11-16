@@ -1,4 +1,4 @@
-/* global document:true requirejs:true Howl:true */
+/* global document:true requirejs:true */
 
 requirejs([
   'handlebars/dist/handlebars.min',
@@ -6,12 +6,14 @@ requirejs([
   'upgrades',
   'numeral.min',
   '_levels',
+  '_sounds',
 ], (
   Handlebars,
   Units,
   Upgrades,
   Numeral,
   Levels,
+  Sounds,
 ) => {
   Handlebars.registerHelper('multiply', (a, b) => a * b);
   Handlebars.registerHelper('fromArray', (arr, index, key) => {
@@ -33,53 +35,7 @@ requirejs([
       this.level = 1;
       this.levels = Levels;
       this.toLevel = 0;
-
-      this.shotSounds = [
-        { name: 'gunshot', url: './sound/sfx/guns/gunshot.wav' },
-        { name: 'rifle', url: './sound/sfx/guns/rifle.wav' },
-        { name: 'rifle2', url: './sound/sfx/guns/rifle2.wav' },
-        { name: 'rifle3', url: './sound/sfx/guns/rifle3.wav' },
-        { name: 'rifle4', url: './sound/sfx/guns/rifle4.wav' },
-        { name: 'shotgun', url: './sound/sfx/guns/shotgun.wav' },
-        { name: 'shotgun2', url: './sound/sfx/guns/shotgun2.wav' },
-      ];
-
-      this.shotUrls = [];
-
-      this.shotUrls.push(this.shotSounds[4]);
-
-      for (let h = 0; h < this.shotUrls.length; h += 1) {
-        this.shotUrls[h].audio = new Howl({
-          src: [this.shotUrls[h].url],
-        });
-      }
-
-      this.voiceSounds = [
-        { name: 'yes-sir', url: './sound/sfx/voice/sir.wav' },
-        { name: 'break-1-9', url: './sound/sfx/voice/break-1-9.wav' },
-        { name: 'bug-out', url: './sound/sfx/voice/bug-out.wav' },
-        { name: 'rock-n-roll', url: './sound/sfx/voice/rock-n-roll.wav' },
-      ];
-
-      this.yesSir = new Howl({
-        src: [this.voiceSounds[0].url],
-      });
-      this.break19 = new Howl({
-        src: [this.voiceSounds[1].url],
-      });
-      this.bugOut = new Howl({
-        src: [this.voiceSounds[2].url],
-      });
-      this.rockNRoll = new Howl({
-        src: [this.voiceSounds[3].url],
-      });
-
-      this.explosions = [
-        { name: 'mortar', url: './sound/sfx/explosions/mortar.wav' },
-      ];
-      this.mortar = new Howl({
-        src: [this.explosions[0].url],
-      });
+      this.sounds = new Sounds();
     }
 
     init() {
@@ -146,6 +102,7 @@ requirejs([
 
     registerEventListeners() {
       this.container.addEventListener('click', (e) => {
+
         if (e.target.classList.contains('attack-button')) {
           let bonus = 0;
 
@@ -165,12 +122,16 @@ requirejs([
 
           this.drawData();
           if (document.querySelector('#sound-toggle').checked) {
-            const index = Math.floor(Math.random() * this.shotUrls.length);
-            this.shotUrls[index].audio.play();
+            const randomSounds = [
+              // 'gunshot',
+              // 'rifle',
+              'rifle4',
+            ];
+            this.sounds.playRandom(randomSounds);
           }
         }
 
-        if (e.path[1].classList.contains('unit__actions')) {
+        if (e.target.classList.contains('unit__actions-btn')) {
           const button = e.target;
           const unitId = Number.parseInt(button.dataset.unitid, 10);
           const unit = this.units.unit[unitId];
@@ -197,26 +158,26 @@ requirejs([
             if (document.querySelector('#sound-toggle').checked) {
               // Play voice lines when recruiting units
               if (unit.id === 0) {
-                this.yesSir.play();
+                this.sounds.play('yes-sir');
               }
               if (unit.id === 1) {
-                this.rockNRoll.play();
+                this.sounds.play('rock-n-roll');
               }
               if (unit.id === 2) {
-                this.mortar.play();
+                this.sounds.play('mortar');
               }
               if (unit.id === 6) {
-                this.break19.play();
+                this.sounds.play('bug-out');
               }
               if (unit.id === 7) {
-                this.bugOut.play();
+                this.sounds.play('break-1-9');
               }
             }
           }
           this.drawData();
         }
 
-        if (e.path[1].classList.contains('upgrade__actions')) {
+        if (e.target.classList.contains('upgrade__actions-btn')) {
           const button = e.target;
           const upgradeId = Number.parseInt(button.dataset.upgradeid, 10);
           const upgrade = this.upgrades.upgrade[upgradeId];
