@@ -146,6 +146,12 @@ requirejs([
         document.querySelector('.skill-points').innerText = this.stats.skillPoints;
         this.drawSkillsSection();
       }
+      const btns = document.querySelectorAll('.skill-point');
+      if (this.stats.skillPoints > 0) {
+        btns.forEach(btn => btn.removeAttribute('disabled'));
+      } else {
+        btns.forEach(btn => btn.setAttribute('disabled', 'disabled'));
+      }
     }
 
     drawSkillsSection() {
