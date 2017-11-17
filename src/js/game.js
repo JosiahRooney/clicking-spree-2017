@@ -45,7 +45,7 @@ requirejs([
         },
         crit: {
           level: 1,
-          bonus: 1.5,
+          bonus: 3,
           increase: 1.4,
         },
         recon: {
@@ -174,7 +174,7 @@ requirejs([
 
           const roll = Math.random() * 100;
           if (this.stats.crit.bonus >= roll) {
-            bonus += this.stats.ap.bonus * 3;
+            bonus += this.stats.ap.bonus * 5;
           }
 
           this.addKills(this.stats.ap.bonus + bonus);
