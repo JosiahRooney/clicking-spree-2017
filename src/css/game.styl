@@ -22,6 +22,25 @@ p
     font-size 2.4rem
     line-height 1
     display block
+    
+.table
+  span
+    font-family "Rajdhani", sans-serif;
+    font-size 1.4rem
+    line-height 1
+    font-weight bold
+    
+.skill-point
+  border 1px solid #aaa
+  border-radius 4px
+  cursor pointer
+  font-size 1.3rem
+  line-height 1.3
+  margin-left 10px
+  
+.skill-point[disabled]
+  opacity 0.4
+  cursor initial
   
 .unit-costs
 .unit-total
@@ -45,7 +64,7 @@ p
   margin-top 25px
   margin-bottom 20px
   
-button
+button:not(.skill-point)
   width 100%
   position relative
   

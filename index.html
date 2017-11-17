@@ -50,6 +50,41 @@
         <div class="container">
 
           <div class="row">
+            <div class="col-md-12">
+              <div class="row">
+                <h4 class="col-md-6">Stats</h4>
+                <h4 class="col-md-6 text-right">Skill Points: <span class="skill-points">0</span></h4>
+              </div>
+              <table class="table">
+                <tr>
+                  <th>Stat</th>
+                  <th>Level</th>
+                  <th>Bonus</th>
+                  <th>Description</th>
+                </tr>
+                <tr>
+                  <td>Attack Power</td>
+                  <td><span class="stat-ap-level">1</span><button class="skill-point" data-skill="ap" disabled>+</button></td>
+                  <td>+<span class="stat-ap-bonus">1</span> kpc</td>
+                  <td>This is your basic attack power. Increase this to do more damage.</td>
+                </tr>
+                <tr>
+                  <td>Crit</td>
+                  <td><span class="stat-crit-level">1</span><button class="skill-point" data-skill="crit" disabled>+</button></td>
+                  <td>+<span class="stat-crit-bonus">1.5%</span> crit chance</td>
+                  <td>This is your critical strike. It has a chance to do 300% damage on click.</td>
+                </tr>
+                <tr>
+                  <td>Recon</td>
+                  <td><span class="stat-recon-level">1</span><button class="skill-point" data-skill="recon" disabled>+</button></td>
+                  <td>+<span class="stat-recon-bonus">1</span> exp per click</td>
+                  <td>This is your recon skill. Increase this to gain more experience points per click.</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+
+          <div class="row">
             <h2 class="col-md-6">Units</h2>
             <h2 class="col-md-6">Upgrades</h2>
             <div class="col-md-6 units">

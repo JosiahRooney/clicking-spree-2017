@@ -36,6 +36,24 @@ requirejs([
       this.levels = Levels;
       this.toLevel = 0;
       this.sounds = new Sounds();
+      this.stats = {
+        skillPoints: 0,
+        ap: {
+          level: 1,
+          bonus: 1,
+          increase: 1.6,
+        },
+        crit: {
+          level: 1,
+          bonus: 1.5,
+          increase: 1.4,
+        },
+        recon: {
+          level: 1,
+          bonus: 1,
+          increase: 1.45,
+        },
+      };
     }
 
     init() {
@@ -48,6 +66,22 @@ requirejs([
       this.levelElement = document.querySelector('.level span');
       this.totalExpCounter = document.querySelector('.total-exp');
       this.toLevelContainer = document.querySelector('.to-level');
+
+      this.statContainers = {
+        ap: {
+          level: document.querySelector('.stat-ap-level'),
+          bonus: document.querySelector('.stat-ap-bonus'),
+        },
+        crit: {
+          level: document.querySelector('.stat-crit-level'),
+          bonus: document.querySelector('.stat-crit-bonus'),
+        },
+        recon: {
+          level: document.querySelector('.stat-recon-level'),
+          bonus: document.querySelector('.stat-recon-bonus'),
+        },
+      };
+
       this.unitContainers = {};
       for (let k = 0; k < this.units.unit.length; k += 1) {
         const unit = this.units.unit[k];
@@ -93,32 +127,58 @@ requirejs([
       const nextLevel = this.levels[this.level + 1];
       this.toLevel = nextLevel.exp - this.exp;
       if (this.exp >= nextLevel.exp) {
+        if (document.querySelector('#sound-toggle').checked) {
+          this.sounds.play('level-up');
+        }
         this.level += 1;
         this.exp = 0;
         this.kills += this.levels[this.level].exp * 0.03;
-        this.kpc = this.level * 0.6;
+        this.stats.skillPoints += 1;
+        document.querySelector('.skill-points').innerText = this.stats.skillPoints;
+      }
+    }
+
+    levelSkill(skill) {
+      if (this.stats.skillPoints > 0) {
+        this.stats.skillPoints -= 1;
+        this.stats[skill].level += 1;
+        this.stats[skill].bonus = 1.3 * (this.stats[skill].level * this.stats[skill].increase);
+        document.querySelector('.skill-points').innerText = this.stats.skillPoints;
+        this.drawSkillsSection();
+      }
+    }
+
+    drawSkillsSection() {
+      const arr = ['ap', 'crit', 'recon'];
+      for (let i = 0; i < arr.length; i += 1) {
+        const container = this.statContainers[arr[i]];
+        container.level.innerText = this.stats[arr[i]].level;
+        container.bonus.innerText = Numeral(this.stats[arr[i]].bonus).format('0.[00]a');
       }
     }
 
     registerEventListeners() {
       this.container.addEventListener('click', (e) => {
-
         if (e.target.classList.contains('attack-button')) {
           let bonus = 0;
 
           if (this.upgrades.upgrade[0].isActive) {
-            bonus = this.kpc * 1.05;
+            bonus += this.stats.ap.bonus * 1.05;
           }
 
           if (this.upgrades.upgrade[5].isActive) {
-            bonus = this.kps * 0.03;
+            bonus += this.kps * 0.03;
           }
 
-          this.addKills(this.kpc + bonus);
+          // bonus += 50; // testing only
 
-          if (this.level < 99) {
-            this.addExp(this.kpc + bonus);
+          const roll = Math.random() * 100;
+          if (this.stats.crit.bonus >= roll) {
+            bonus += this.stats.ap.bonus * 3;
           }
+
+          this.addKills(this.stats.ap.bonus + bonus);
+          this.addExp(this.stats.recon.bonus + bonus);
 
           this.drawData();
           if (document.querySelector('#sound-toggle').checked) {
@@ -175,6 +235,11 @@ requirejs([
             }
           }
           this.drawData();
+        }
+
+        if (e.target.classList.contains('skill-point')) {
+          const { skill } = e.target.dataset;
+          this.levelSkill(skill);
         }
 
         if (e.target.classList.contains('upgrade__actions-btn')) {
@@ -265,6 +330,12 @@ requirejs([
         this.addExp(Math.floor(kps));
       }
       this.drawData();
+      const btns = document.querySelectorAll('.skill-point');
+      if (this.stats.skillPoints > 0) {
+        btns.forEach(btn => btn.removeAttribute('disabled'));
+      } else {
+        btns.forEach(btn => btn.setAttribute('disabled', 'disabled'));
+      }
     }
   }
 

@@ -16,6 +16,7 @@ define([], () => {
         { name: 'bug-out', url: './sound/sfx/voice/bug-out.wav' },
         { name: 'rock-n-roll', url: './sound/sfx/voice/rock-n-roll.wav' },
         { name: 'mortar', url: './sound/sfx/explosions/mortar.wav' },
+        { name: 'level-up', url: './sound/sfx/level-up.mp3' },
       ];
       this.sounds = [];
       for (let h = 0; h < this.sources.length; h += 1) {
