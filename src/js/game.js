@@ -6,14 +6,14 @@ requirejs([
   'upgrades',
   'numeral.min',
   '_levels',
-  '_sounds',
+  '_sounds'
 ], (
   Handlebars,
   Units,
   Upgrades,
   Numeral,
   Levels,
-  Sounds,
+  Sounds
 ) => {
   Handlebars.registerHelper('multiply', (a, b) => a * b);
   Handlebars.registerHelper('fromArray', (arr, index, key) => {
@@ -38,21 +38,9 @@ requirejs([
       this.sounds = new Sounds();
       this.stats = {
         skillPoints: 0,
-        ap: {
-          level: 1,
-          bonus: 1,
-          increase: 1.6,
-        },
-        crit: {
-          level: 1,
-          bonus: 3,
-          increase: 1.4,
-        },
-        recon: {
-          level: 1,
-          bonus: 1,
-          increase: 1.45,
-        },
+        ap: { level: 1, bonus: 1, increase: 1.6 },
+        crit: { level: 1, bonus: 3, increase: 1.4 },
+        recon: { level: 1, bonus: 1, increase: 1.45 }
       };
     }
 
@@ -70,16 +58,16 @@ requirejs([
       this.statContainers = {
         ap: {
           level: document.querySelector('.stat-ap-level'),
-          bonus: document.querySelector('.stat-ap-bonus'),
+          bonus: document.querySelector('.stat-ap-bonus')
         },
         crit: {
           level: document.querySelector('.stat-crit-level'),
-          bonus: document.querySelector('.stat-crit-bonus'),
+          bonus: document.querySelector('.stat-crit-bonus')
         },
         recon: {
           level: document.querySelector('.stat-recon-level'),
-          bonus: document.querySelector('.stat-recon-bonus'),
-        },
+          bonus: document.querySelector('.stat-recon-bonus')
+        }
       };
 
       this.unitContainers = {};
@@ -87,7 +75,7 @@ requirejs([
         const unit = this.units.unit[k];
         this.unitContainers[unit.safeName] = {
           container: this.container.querySelector(`.unit__${unit.safeName}`),
-          unit: this.units.unit[k],
+          unit: this.units.unit[k]
         };
       }
       this.unitContainersArray = Object.entries(this.unitContainers);
@@ -96,7 +84,7 @@ requirejs([
         const upgrade = this.upgrades.upgrade[n];
         this.upgradeContainers[upgrade.safeName] = {
           container: this.container.querySelector(`.upgrade__${upgrade.safeName}`),
-          upgrade: this.upgrades.upgrade[n],
+          upgrade: this.upgrades.upgrade[n]
         };
       }
       this.upgradeContainersArray = Object.entries(this.upgradeContainers);
@@ -165,6 +153,8 @@ requirejs([
 
     registerEventListeners() {
       this.container.addEventListener('click', (e) => {
+
+        // Attack
         if (e.target.classList.contains('attack-button')) {
           let bonus = 0;
 
@@ -187,14 +177,7 @@ requirejs([
           this.addExp(this.stats.recon.bonus + bonus);
 
           this.drawData();
-          if (document.querySelector('#sound-toggle').checked) {
-            const randomSounds = [
-              // 'gunshot',
-              // 'rifle',
-              'rifle4',
-            ];
-            this.sounds.playRandom(randomSounds);
-          }
+          this.sounds.play('rifle4');
         }
 
         if (e.target.classList.contains('unit__actions-btn')) {
@@ -204,7 +187,7 @@ requirejs([
 
           if (this.kills >= unit.cost) {
             // can afford it
-            if (unit.unitCost != null) {
+            if (unit.unitCost !== null) {
               const unitCost = this.units.unit[unit.unitCost.unit];
               if (unitCost.total >= unit.unitCost.cost) {
                 // There are enough units to spare
@@ -221,23 +204,21 @@ requirejs([
               button.dataset.hideUntil = unit.cost;
             }
 
-            if (document.querySelector('#sound-toggle').checked) {
-              // Play voice lines when recruiting units
-              if (unit.id === 0) {
-                this.sounds.play('yes-sir');
-              }
-              if (unit.id === 1) {
-                this.sounds.play('rock-n-roll');
-              }
-              if (unit.id === 2) {
-                this.sounds.play('mortar');
-              }
-              if (unit.id === 6) {
-                this.sounds.play('bug-out');
-              }
-              if (unit.id === 7) {
-                this.sounds.play('break-1-9');
-              }
+            // Play voice lines when recruiting units
+            if (unit.id === 0) {
+              this.sounds.play('yes-sir');
+            }
+            if (unit.id === 1) {
+              this.sounds.play('rock-n-roll');
+            }
+            if (unit.id === 2) {
+              this.sounds.play('mortar');
+            }
+            if (unit.id === 6) {
+              this.sounds.play('bug-out');
+            }
+            if (unit.id === 7) {
+              this.sounds.play('break-1-9');
             }
           }
           this.drawData();

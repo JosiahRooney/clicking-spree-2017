@@ -1,4 +1,4 @@
-/* global define:true Howl:true */
+/* global define:true Howl:true document:true */
 
 define([], () => {
   class Sounds {
@@ -31,8 +31,10 @@ define([], () => {
     }
 
     play(name) {
-      const sound = this.sounds.find(item => item.name === name);
-      sound.audio.play();
+      if (document.querySelector('#sound-toggle').checked) {
+        const sound = this.sounds.find(item => item.name === name);
+        sound.audio.play();
+      }
     }
 
     /*

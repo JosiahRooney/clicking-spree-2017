@@ -33,7 +33,7 @@
     "brace-style": 1,
     "camelcase": 2,
     "curly": 2,
-    "padded-blocks": 0,
+    "padded-blocks": 1,
     "dot-notation": 1,
     "eqeqeq": 1,
     "new-parens": 2,

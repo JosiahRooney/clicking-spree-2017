@@ -22,17 +22,11 @@
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "cypress": "^1.0.3",
-    "eslint": "^4.10.0",
-    "eslint-config-airbnb-base": "^12.1.0",
-    "eslint-grunt": "^1.0.0",
-    "eslint-plugin-import": "^2.8.0",
     "grunt": "^0.4.0",
     "grunt-babel": "^7.0.0",
     "grunt-browserify": "^5.2.0",
     "grunt-contrib-stylus": "^1.2.0",
     "grunt-contrib-watch": "^1.0.0",
-    "grunt-eslint": "^20.1.0",
-    "gruntify-eslint": "^4.0.0",
     "load-grunt-tasks": "^3.5.2",
     "webpack": "^3.8.1"
   }
